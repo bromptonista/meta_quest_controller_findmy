@@ -1,0 +1,17 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run unit tests & syntax checks
+        run: |
+          npm test
+          for f in js/*.js sw.js; do node --check "$f"; done
+          python3 -m py_compile serve.py
