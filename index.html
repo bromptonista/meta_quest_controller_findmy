@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#070b12" />
+  <meta
+    name="description"
+    content="Find lost Meta Quest 3, 3S, Pro, and 2 VR controllers in Passthrough WebXR using resonant TruTouch haptic chirps, a 3D wayfinder arrow, last-seen room pinning, and an IMU cushion-tap seismometer."
+  />
+  <title>Quest Controller Find My — WebXR Passthrough Haptic &amp; 3D Beacon Locator</title>
+  <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="page-shell">
+    <header class="hero">
+      <div class="hero-badge-row">
+        <span id="envStatusBadge" class="env-badge info">Checking WebXR Environment…</span>
+      </div>
+      <h1>Quest Controller Find My</h1>
+      <p class="hero-sub">
+        Zero-install WebXR locator for misplaced Meta Quest 3, 3S, Pro &amp; Quest 2 controllers.
+        Blasts resonant TruTouch haptics, projects a 2m Passthrough 3D beacon &amp; off-screen wayfinder arrow,
+        and detects cushion-tap vibrations via the controller's IMU.
+      </p>
+      <p id="envStatusDetail" class="env-detail"></p>
+    </header>
+
+    <section class="mission-card" aria-label="Controller Locator Controls">
+      <span class="section-label">1. Select Missing Controller (Pinch with Bare Hand or Click)</span>
+      <div class="quick-ping-grid" role="group" aria-label="Target controller selection">
+        <button type="button" class="hand-btn active" data-select-hand="left" aria-pressed="true">
+          <span class="hand-btn-title">Left Controller</span>
+          <span class="hand-btn-meta">Ping Left Touch / Plus</span>
+        </button>
+        <button type="button" class="hand-btn" data-select-hand="right" aria-pressed="false">
+          <span class="hand-btn-title">Right Controller</span>
+          <span class="hand-btn-meta">Ping Right Touch / Plus</span>
+        </button>
+        <button type="button" class="hand-btn" data-select-hand="both" aria-pressed="false">
+          <span class="hand-btn-title">Both Controllers</span>
+          <span class="hand-btn-meta">Hand-Tracking Sweep</span>
+        </button>
+      </div>
+
+      <span class="section-label">2. Acoustic Haptic Waveform</span>
+      <div class="pattern-grid" role="group" aria-label="Haptic waveform pattern">
+        <button type="button" class="pattern-card active" data-select-pattern="chirp" aria-pressed="true">
+          <div class="pattern-card-top">
+            <span class="pattern-name">Resonant Chirp</span>
+            <span class="pattern-tag">RECOMMENDED</span>
+          </div>
+          <p class="pattern-desc">
+            Rapid 4x TruTouch staccato strikes + listening gap. Cuts through cushions &amp; prevents motor throttling.
+          </p>
+        </button>
+
+        <button type="button" class="pattern-card" data-select-pattern="sos" aria-pressed="false">
+          <div class="pattern-card-top">
+            <span class="pattern-name">SOS Morse (··· ——— ···)</span>
+            <span class="pattern-tag">NOISY ROOMS</span>
+          </div>
+          <p class="pattern-desc">
+            Unmistakable Morse rhythm so your ears distinguish the buzz from HVAC, fans, or fridge hum.
+          </p>
+        </button>
+
+        <button type="button" class="pattern-card" data-select-pattern="heartbeat" aria-pressed="false">
+          <div class="pattern-card-top">
+            <span class="pattern-name">Sonar Heartbeat</span>
+            <span class="pattern-tag">TRIANGULATE</span>
+          </div>
+          <p class="pattern-desc">
+            Double-thump cadence with wide quiet windows to turn your head and pinpoint sound direction.
+          </p>
+        </button>
+
+        <button type="button" class="pattern-card" data-select-pattern="overdrive" aria-pressed="false">
+          <div class="pattern-card-top">
+            <span class="pattern-name">Max Overdrive</span>
+            <span class="pattern-tag">HARD SURFACES</span>
+          </div>
+          <p class="pattern-desc">
+            Sustained 100% drive (with auto 8s thermal breather) that rattles loudly against wood or desks.
+          </p>
+        </button>
+      </div>
+
+      <div class="cta-stack">
+        <button type="button" id="btnLaunchXR" class="btn-primary-xr">
+          Enter Passthrough &amp; Ping <span id="launchTargetLabel">Left Controller</span>
+        </button>
+        <button type="button" id="btnOpenSimulator" class="btn-sim">
+          Try Interactive 3D Simulator
+        </button>
+      </div>
+
+      <div class="direct-row">
+        <span>Instant 1-Tap Launch:</span>
+        <button type="button" class="chip-btn" data-quick-xr="left">Launch Left Now</button>
+        <button type="button" class="chip-btn" data-quick-xr="right">Launch Right Now</button>
+        <button type="button" class="chip-btn" data-quick-xr="both">Launch Both Now</button>
+      </div>
+
+      <div id="launchError" class="error-banner" role="alert" hidden></div>
+    </section>
+
+    <div class="info-grid">
+      <section class="info-card">
+        <h2>Field Recovery Playbook (Beating Deep Sleep)</h2>
+        <ol class="step-list">
+          <li>
+            <span class="step-num">1</span>
+            <div class="step-body">
+              <strong>Wake the Controller's 6-Axis IMU</strong>
+              <p>
+                Idle Touch Plus controllers enter deep sleep to save battery and turn off their radio.
+                Tap your Quest power button to sleep the headset for 15s and wake it back up, or walk heavily
+                and jostle couch cushions as you enter each room.
+              </p>
+            </div>
+          </li>
+          <li>
+            <span class="step-num">2</span>
+            <div class="step-body">
+              <strong>Listen for Wakeup Fanfare &amp; Resonant Chirps</strong>
+              <p>
+                Keep Passthrough active while sweeping rooms. The instant the controller reconnects, your headset
+                plays a rising 3-note fanfare and immediately hammers all haptic actuators—while keeping speakers
+                quiet between bursts so you can hear the physical buzz.
+              </p>
+            </div>
+          </li>
+          <li>
+            <span class="step-num">3</span>
+            <div class="step-body">
+              <strong>Use Cushion-Tap Seismometer &amp; 3D Sighting Pin</strong>
+              <p>
+                Connected but muffled deep inside a sofa? Pat each cushion and watch the 3D HUD's
+                <strong>IMU Seismometer</strong> spike when tilted. If Quest's wide-FOV cameras catch even a
+                1-frame glimpse, a 2m neon pillar stays pinned to that spot in your room.
+              </p>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <section class="info-card">
+        <h2>Open on Your Meta Quest</h2>
+        <div class="qr-handoff">
+          <div id="qrContainer" class="qr-box" aria-hidden="false"></div>
+          <div class="qr-meta">
+            <p>
+              Bookmark the HTTPS URL inside <strong>Meta Quest Browser</strong> so it's ready with hand tracking
+              anytime a controller vanishes—even offline via PWA cache.
+            </p>
+          </div>
+        </div>
+
+        <span class="section-label">HTTPS Bookmark URL</span>
+        <div class="code-row">
+          <code id="shareUrlDisplay">https://bromptonista.github.io/meta_quest_controller_findmy/</code>
+          <button type="button" id="btnCopyUrl" class="mini-btn">Copy</button>
+        </div>
+
+        <span class="section-label">Or Beam Straight to Headset via ADB</span>
+        <div class="code-row">
+          <code id="adbLaunchDisplay">adb shell am start -a android.intent.action.VIEW ...</code>
+          <button type="button" id="btnCopyAdb" class="mini-btn">Copy</button>
+        </div>
+      </section>
+    </div>
+
+    <section class="feature-strip" aria-label="Technical Capabilities">
+      <div class="feature-tile">
+        <h3>3D Spatial HUD Slate</h3>
+        <p>Rendered natively in stereo WebGL—never disappears when Quest ignores 2D HTML DOM overlays.</p>
+      </div>
+      <div class="feature-tile">
+        <h3>Off-Screen 3D Arrow</h3>
+        <p>Head-space compass chevron points straight toward live or last-seen 6DoF coordinates.</p>
+      </div>
+      <div class="feature-tile">
+        <h3>IMU Bump Seismometer</h3>
+        <p>160ms quaternion delta rejects motor buzz and flashes HOT when you tap the right cushion.</p>
+      </div>
+      <div class="feature-tile">
+        <h3>Multi-Actuator Drive</h3>
+        <p>Fires body, trigger, and thumbstick motors simultaneously across Touch, Touch Pro &amp; Touch Plus.</p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      Zero dependencies · Works offline once opened · Built for Meta Quest 3, 3S, Pro &amp; Quest 2 WebXR
+    </footer>
+  </main>
+
+  <!-- Handheld AR Screen DOM Overlay Fallback (only shown if session.domOverlayState activates) -->
+  <aside id="domOverlayHud" class="dom-overlay-hud" hidden>
+    <strong id="domHudHeadline">Searching for Controller…</strong>
+    <div class="hud-row">
+      <button type="button" class="mini-btn" data-hud-action="target-left">Left</button>
+      <button type="button" class="mini-btn" data-hud-action="target-right">Right</button>
+      <button type="button" class="mini-btn" data-hud-action="target-both">Both</button>
+      <button type="button" class="mini-btn" data-hud-action="cycle-pattern">Mode</button>
+      <button type="button" class="mini-btn" data-hud-action="toggle-sonar">Sonar</button>
+      <button type="button" class="mini-btn" data-hud-action="exit-xr">Exit</button>
+    </div>
+  </aside>
+
+  <!-- Fullscreen Interactive 3D Desktop & Mobile Passthrough Simulator -->
+  <div id="simulatorModal" class="sim-modal" role="dialog" aria-modal="true" aria-label="Interactive 3D Passthrough Simulator" hidden>
+    <div class="sim-topbar">
+      <div class="sim-title-group">
+        <strong>3D Passthrough Simulator</strong>
+        <span class="sim-hint">Drag canvas (or WASD / Arrows) to look around · Click buttons directly on the 3D Spatial HUD!</span>
+      </div>
+      <div class="sim-controls">
+        <button type="button" class="sim-btn" data-sim-stage="sleep">1. Deep Sleep</button>
+        <button type="button" class="sim-btn" data-sim-stage="imu">2. Hidden in Sofa (IMU Only)</button>
+        <button type="button" id="btnSimBump" class="sim-btn bump">Pat Sofa Cushion! (IMU Spike)</button>
+        <button type="button" class="sim-btn active" data-sim-stage="visual">3. Camera 6DoF Lock</button>
+        <button type="button" class="sim-btn" data-sim-stage="pinned">4. Occluded (Last-Seen Pin)</button>
+        <button type="button" id="btnCloseSimulator" class="sim-btn close">Close Simulator</button>
+      </div>
+    </div>
+    <div class="sim-canvas-wrap">
+      <canvas id="simulatorCanvas"></canvas>
+      <div class="sim-bottom-tip">
+        Turn left toward the wireframe sofa to follow the green 3D Wayfinder Arrow onto the 2m Neon Beacon Pillar!
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>

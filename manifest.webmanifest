@@ -1,0 +1,17 @@
+{
+  "name": "Quest Controller Find My",
+  "short_name": "Quest FindMy",
+  "description": "WebXR Passthrough haptic pinger, 3D wayfinder arrow, and IMU seismometer for lost Meta Quest controllers.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#070b12",
+  "theme_color": "#070b12",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
